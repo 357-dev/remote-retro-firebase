@@ -1,0 +1,24 @@
+.start {
+    border: 1px solid #2ecc71;
+}
+
+.stop {
+    border: 1px solid #e74c3c;
+}
+
+.continue {
+    border: 1px solid #1abc9c;
+}
+
+.message-column {
+    display: flex;
+    flex-direction: column;
+}
+
+.message-action {
+    margin-right: 15px;
+}
+
+.author {
+    font-size: 0.65rem;
+}
