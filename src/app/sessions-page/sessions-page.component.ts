@@ -13,12 +13,16 @@ export class SessionsPageComponent implements OnInit {
 
   newSession: string;
   model: SessionsPage;
+
+  sessionsLoading: boolean;
   constructor(private router: Router, private route: ActivatedRoute, private service: SessionsPageService,
-    private snackBar: MatSnackBar) {
+              private snackBar: MatSnackBar) {
     this.model = this.route.snapshot.data.model;
   }
 
   ngOnInit(): void {
+    this.sessionsLoading = true;
+    this.model.sessions.subscribe(() => this.sessionsLoading = false, () => this.snackBar.open('Lost connection. Please refresh!'));
   }
 
   clearSession() {

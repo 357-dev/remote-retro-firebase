@@ -1,8 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import {COMMA, ENTER} from '@angular/cdk/keycodes';
-import { MatChipInputEvent } from '@angular/material/chips';
+import { ENTER } from '@angular/cdk/keycodes';
 
 import { SessionPage } from './models/session-page.model';
 import { SessionPageService } from './session-page.service';
@@ -26,6 +25,8 @@ export class SessionPageComponent implements OnInit {
   continueMessage: string;
   action: string;
 
+  messagesLoading: boolean;
+
   constructor(private route: ActivatedRoute,
               private service: SessionPageService, private userService: UserService,
               private snackBar: MatSnackBar) {
@@ -33,7 +34,8 @@ export class SessionPageComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.model.messages.subscribe(() => { }, () => this.snackBar.open('Lost connection. Please refresh!'));
+    this.messagesLoading = true;
+    this.model.messages.subscribe(() => this.messagesLoading = false, () => this.snackBar.open('Lost connection. Please refresh!'));
   }
 
   addMessage(category: MessageCategories) {
