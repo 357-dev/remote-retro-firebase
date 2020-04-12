@@ -14,5 +14,6 @@ You can deploy this and host it for free.
 * firebase login
 * firebase init
 * firebase deploy
+
 Once you're up and running try `npm run deploy`
 
