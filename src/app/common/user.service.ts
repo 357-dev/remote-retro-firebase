@@ -11,8 +11,8 @@ export class UserService {
     sessionStorage.setItem('nickname', nickname);
   }
 
-  getNickname() {
+  getNickname(onlySession: boolean = false) {
     const sessionNickname = sessionStorage.getItem('nickname');
-    return sessionNickname ?? 'Anonymous';
+    return onlySession ? sessionNickname : sessionNickname ?? 'Anonymous';
   }
 }

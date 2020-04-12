@@ -12,7 +12,7 @@ export class IntroPageComponent implements OnInit {
   constructor(private userService: UserService, private router: Router) { }
 
   ngOnInit(): void {
-    this.nickname = this.userService.getNickname();
+    this.nickname = this.userService.getNickname(true);
   }
 
   clearNickname() {
