@@ -10,6 +10,7 @@ The project uses Angular and Firebase (with no backend) to create a realtime rem
 
 # Deploy to firebase
 You can deploy this and host it for free.
+* ng build --prod
 * firebase login
 * firebase init
 * firebase deploy
