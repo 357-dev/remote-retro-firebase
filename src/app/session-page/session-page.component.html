@@ -4,10 +4,10 @@
     </div>
 </div>
 
-<div class="row" [hidden]="messagesLoading">
+<div class="row" *ngIf="model.session | async as session">
     <div class="col-xs-12">
-        <h1>{{ (model.session | async)?.title }}</h1>
-        <h2>{{ (model.session | async)?.created }}</h2>
+        <h1>{{ session.title }}</h1>
+        <h2>{{ session.created }}</h2>
     </div>
 </div>
 
