@@ -4,15 +4,20 @@ import { Injectable } from '@angular/core';
   providedIn: 'root'
 })
 export class UserService {
+  readonly anonymous: string = 'Anonymous';
+  readonly nicknameKey: string = 'nickname';
 
   constructor() { }
 
   setNickname(nickname: string) {
-    sessionStorage.setItem('nickname', nickname);
+    localStorage.setItem(this.nicknameKey, nickname);
   }
 
-  getNickname(onlySession: boolean = false) {
-    const sessionNickname = sessionStorage.getItem('nickname');
-    return onlySession ? sessionNickname : sessionNickname ?? 'Anonymous';
+  getNickname(): string {
+    return localStorage.getItem(this.nicknameKey) ?? this.anonymous;
+  }
+
+  getAnonymous(): string {
+    return this.anonymous;
   }
 }

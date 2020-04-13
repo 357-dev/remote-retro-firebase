@@ -12,29 +12,6 @@
 </div>
 
 <div class="row" [hidden]="messagesLoading">
-    <div class="col-xs-12 col-md-6 col-md-offset-3">
-        <mat-form-field>
-            <mat-chip-list #chipList aria-label="Actions">
-                <mat-chip color="accent" selected *ngFor="let action of model.actions | async" selectable="false"
-                    removable="true" (removed)="removeAction(action)">
-                    {{action.action}}
-                    <mat-icon matChipRemove>cancel</mat-icon>
-                </mat-chip>
-                <input placeholder="Actions" [(ngModel)]="action" [matChipInputFor]="chipList"
-                    [matChipInputSeparatorKeyCodes]="separatorKeysCodes" (matChipInputTokenEnd)="addAction()">
-            </mat-chip-list>
-        </mat-form-field>
-    </div>
-    <div class="col-xs-12 col-md-3">
-        <button mat-mini-fab color="primary" (click)="addAction()">
-            <span class="material-icons">
-                playlist_add
-            </span>
-        </button>
-    </div>
-</div>
-
-<div class="row" [hidden]="messagesLoading">
     <div class="col-xs-12 col-sm-4">
         <mat-card class="start">
             <mat-card-content>
@@ -208,5 +185,34 @@
             </mat-card>
 
         </div>
+    </div>
+</div>
+
+<div class="row" [hidden]="messagesLoading">
+    <div class="col-xs-12">
+        <mat-divider></mat-divider>
+    </div>
+</div>
+
+<div class="row" [hidden]="messagesLoading">
+    <div class="col-xs-12 col-md-6 col-md-offset-3">
+        <mat-form-field>
+            <mat-chip-list #chipList aria-label="Actions">
+                <mat-chip color="accent" selected *ngFor="let action of model.actions | async" selectable="false"
+                    removable="true" (removed)="removeAction(action)">
+                    {{action.action}}
+                    <mat-icon matChipRemove>cancel</mat-icon>
+                </mat-chip>
+                <input placeholder="Actions" [(ngModel)]="action" [matChipInputFor]="chipList"
+                    [matChipInputSeparatorKeyCodes]="separatorKeysCodes" (matChipInputTokenEnd)="addAction()">
+            </mat-chip-list>
+        </mat-form-field>
+    </div>
+    <div class="col-xs-12 col-md-3">
+        <button mat-mini-fab color="primary" (click)="addAction()">
+            <span class="material-icons">
+                playlist_add
+            </span>
+        </button>
     </div>
 </div>

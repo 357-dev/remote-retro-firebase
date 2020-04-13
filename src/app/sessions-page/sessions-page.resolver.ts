@@ -20,9 +20,11 @@ export class SessionsPageResolver implements Resolve<SessionsPage> {
     const sessions = this.db.list<Session>('sessions')
       .snapshotChanges()
       .pipe(map(changes =>
-        changes.map(s => {
-          return { key: s.key, title: s.payload.val().title, created: s.payload.val().created };
-        })
+        changes.map(s => ({
+          key: s.key,
+          title: s.payload.val().title,
+          created: s.payload.val().created
+        }))
       ));
 
     const model = new SessionsPage(sessions);

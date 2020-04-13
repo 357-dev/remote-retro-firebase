@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { UserService } from '../common/user.service';
 import { Router } from '@angular/router';
+import { MatCheckboxChange } from '@angular/material/checkbox';
 
 @Component({
   selector: 'rr-intro-page',
@@ -8,11 +9,12 @@ import { Router } from '@angular/router';
   styleUrls: ['./intro-page.component.scss']
 })
 export class IntroPageComponent implements OnInit {
+  anonymous: boolean;
   nickname: string;
   constructor(private userService: UserService, private router: Router) { }
 
   ngOnInit(): void {
-    this.nickname = this.userService.getNickname(true);
+    this.nickname = this.userService.getNickname();
   }
 
   clearNickname() {
@@ -22,5 +24,12 @@ export class IntroPageComponent implements OnInit {
   pickSession() {
     this.userService.setNickname(this.nickname);
     this.router.navigate(['sessions']);
+  }
+
+  anonymousChanged(event: MatCheckboxChange) {
+    this.anonymous = event.checked;
+    if (event.checked) {
+      this.nickname = this.userService.getAnonymous();
+    }
   }
 }

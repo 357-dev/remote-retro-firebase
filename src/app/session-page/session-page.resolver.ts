@@ -22,39 +22,31 @@ export class SessionPageResolver implements Resolve<SessionPage> {
     const sessionKey = route.paramMap.get('sessionKey');
     const session = this.db.object<Session>(`sessions/${sessionKey}`)
       .snapshotChanges()
-      .pipe(map(
-        s => {
-          return {
-            key: sessionKey,
-            title: s.payload.val().title,
-            created: s.payload.val().created
-          };
-        }
-      ));
+      .pipe(map(s => ({
+        key: sessionKey,
+        title: s.payload.val().title,
+        created: s.payload.val().created
+      })));
 
     const messages = this.db.list<Message>(`messages/${sessionKey}`)
       .snapshotChanges()
       .pipe(map(changes =>
-        changes.map(m => {
-          return {
-            key: m.key,
-            body: m.payload.val().body,
-            author: m.payload.val().author,
-            category: m.payload.val().category,
-            votes: m.payload.val().votes
-          };
-        }
-      )));
+        changes.map(m => ({
+          key: m.key,
+          body: m.payload.val().body,
+          author: m.payload.val().author,
+          category: m.payload.val().category,
+          votes: m.payload.val().votes
+        }))
+      ));
 
     const actions = this.db.list<Action>(`actions/${sessionKey}`)
       .snapshotChanges()
       .pipe(map(changes =>
-        changes.map(m => {
-          return {
-            key: m.key,
-            action: m.payload.val().action
-          };
-        })
+        changes.map(m => ({
+          key: m.key,
+          action: m.payload.val().action
+        }))
       ));
 
     return of({ sessionKey, session, messages, actions });
