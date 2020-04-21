@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { AngularFireDatabase } from '@angular/fire/database';
 import { Story } from './models/story.model';
+import { DbUtils } from '../common/db-utils';
 
 @Injectable({
   providedIn: 'root'
@@ -14,23 +15,23 @@ export class EstimationPageService {
   }
 
   deleteStory(estimationKey: string, storyKey: string) {
-    return this.db.object(`estimations/${estimationKey}/${storyKey}`).remove();
+    return this.db.object(DbUtils.estimationUrl(estimationKey, storyKey)).remove();
   }
 
   addVote(estimationKey: string, storyKey: string, nickname: string, voteValue: string) {
     const vote = {};
     vote[nickname] = voteValue;
-    return this.db.object(`estimations/${estimationKey}/${storyKey}/votes`).update(vote);
+    return this.db.object(DbUtils.estimationVotesUrl(estimationKey, storyKey)).update(vote);
   }
 
   showVotes(estimationKey: string, storyKey: string) {
-    return this.db.object(`estimations/${estimationKey}/${storyKey}`).update({ votesVisible: true });
+    return this.db.object(DbUtils.estimationUrl(estimationKey, storyKey)).update({ votesVisible: true });
   }
 
   selectStory(estimationKey: string, selectedStoryKey: string, allStoryKeys: string[]) {
     const notSelectedStories: string[] = allStoryKeys.filter(s => s !== selectedStoryKey);
     const promises: Promise<void>[] = notSelectedStories
-      .map(storyKey => this.db.object(`estimations/${estimationKey}/${storyKey}`).update({ selected: false }));
+      .map(storyKey => this.db.object(DbUtils.estimationUrl(estimationKey, storyKey)).update({ selected: false }));
     return Promise.all(promises)
       .then(() => this.db.object(`estimations/${estimationKey}/${selectedStoryKey}`).update({ selected: true }));
   }

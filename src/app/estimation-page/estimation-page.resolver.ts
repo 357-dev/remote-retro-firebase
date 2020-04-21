@@ -7,6 +7,7 @@ import { EstimationPage } from './models/estimation-page.model';
 import { Sprint } from '../common/sprint.model';
 import { Story } from './models/story.model';
 import { map } from 'rxjs/internal/operators/map';
+import { DbUtils } from '../common/db-utils';
 
 @Injectable({
     providedIn: 'root'
@@ -22,8 +23,8 @@ export class EstimationPageResolver implements Resolve<EstimationPage> {
         const teamKey = route.paramMap.get('teamKey');
         const sprintKey = route.paramMap.get('sprintKey');
 
-        const sprint = this.db.object<Sprint>(`teams/${teamKey}/sprints/${sprintKey}`).valueChanges();
-        const stories = this.db.list<Story>(`estimations/${sprintKey}`)
+        const sprint = this.db.object<Sprint>(DbUtils.sprintUrl(teamKey, sprintKey)).valueChanges();
+        const stories = this.db.list<Story>(DbUtils.estimationsUrl(sprintKey))
             .snapshotChanges()
             .pipe(map(changes =>
                 changes.map(m => ({

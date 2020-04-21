@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { AngularFireDatabase } from '@angular/fire/database';
 import { Team } from './models/team.model';
+import { DbUtils } from '../common/db-utils';
 
 @Injectable({
   providedIn: 'root'
@@ -11,6 +12,6 @@ export class TeamsPageService {
 
   createTeam(name: string) {
     const team: Team = { key: null, name };
-    return this.db.list('teams').push(team);
+    return this.db.list(DbUtils.teamsUrl()).push(team);
   }
 }

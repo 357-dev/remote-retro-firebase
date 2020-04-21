@@ -5,7 +5,7 @@
         </button>
         <h1>Estimation <span *ngIf="model.sprint | async as sprint"> - {{ sprint.name }} </span></h1>
     </div>
-    <button mat-icon-button matTooltip="Delete sprint" (click)="deleteEstimation()">
+    <button mat-icon-button matTooltip="Delete estimation" (click)="deleteEstimation()">
         <mat-icon>delete</mat-icon>
     </button>
 </mat-toolbar>

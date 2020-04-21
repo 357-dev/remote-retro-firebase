@@ -6,6 +6,7 @@ import { Observable, of } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { TeamsPage } from './models/teams-page.model';
 import { Team } from './models/team.model';
+import { DbUtils } from '../common/db-utils';
 
 @Injectable({
   providedIn: 'root'
@@ -18,7 +19,7 @@ export class TeamsPageResolver implements Resolve<TeamsPage> {
     route: ActivatedRouteSnapshot,
     state: RouterStateSnapshot
   ): Observable<TeamsPage> {
-    const teams = this.db.list<Team>('teams')
+    const teams = this.db.list<Team>(DbUtils.teamsUrl())
       .snapshotChanges()
       .pipe(map(changes =>
         changes.map(s => ({

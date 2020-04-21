@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { UserService } from '../common/user.service';
 import { Router } from '@angular/router';
 import { MatCheckboxChange } from '@angular/material/checkbox';
+import { NavUtils } from '../common/nav-utils';
 
 @Component({
   selector: 'rr-intro-page',
@@ -23,7 +24,7 @@ export class IntroPageComponent implements OnInit {
 
   pickSession() {
     this.userService.setNickname(this.nickname);
-    this.router.navigate(['teams']);
+    this.router.navigate(NavUtils.teamsUrl());
   }
 
   anonymousChanged(event: MatCheckboxChange) {

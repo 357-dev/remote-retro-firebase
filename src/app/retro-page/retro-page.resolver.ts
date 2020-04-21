@@ -8,6 +8,7 @@ import { RetroPage } from './models/retro-page.model';
 import { Message } from './models/message.model';
 import { Action } from './models/action.model';
 import { Sprint } from '../common/sprint.model';
+import { DbUtils } from '../common/db-utils';
 
 @Injectable({
   providedIn: 'root'
@@ -23,8 +24,8 @@ export class RetroPageResolver implements Resolve<RetroPage> {
     const teamKey = route.paramMap.get('teamKey');
     const sprintKey = route.paramMap.get('sprintKey');
 
-    const sprint = this.db.object<Sprint>(`teams/${teamKey}/sprints/${sprintKey}`).valueChanges();
-    const messages = this.db.list<Message>(`messages/${sprintKey}`)
+    const sprint = this.db.object<Sprint>(DbUtils.sprintUrl(teamKey, sprintKey)).valueChanges();
+    const messages = this.db.list<Message>(DbUtils.messagesUrl(sprintKey))
       .snapshotChanges()
       .pipe(map(changes =>
         changes.map(m => ({
@@ -36,7 +37,7 @@ export class RetroPageResolver implements Resolve<RetroPage> {
         }))
       ));
 
-    const actions = this.db.list<Action>(`actions/${sprintKey}`)
+    const actions = this.db.list<Action>(DbUtils.actionsUrl(sprintKey))
       .snapshotChanges()
       .pipe(map(changes =>
         changes.map(m => ({

@@ -7,6 +7,7 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { Story } from './models/story.model';
 import { MultistoryInputComponent } from './multistory-input/multistory-input.component';
 import { MatDialog } from '@angular/material/dialog';
+import { NavUtils } from '../common/nav-utils';
 
 @Component({
   selector: 'rr-estimation-page',
@@ -93,7 +94,7 @@ export class EstimationPageComponent implements OnInit {
   }
 
   goToTeam() {
-    this.router.navigate(['teams', this.model.teamKey]);
+    this.router.navigate(NavUtils.teamUrl(this.model.teamKey));
   }
 
   deleteEstimation() {

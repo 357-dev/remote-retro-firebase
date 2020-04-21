@@ -4,6 +4,7 @@ import { TeamPageService } from './team-page.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Sprint } from '../common/sprint.model';
+import { NavUtils } from '../common/nav-utils';
 
 @Component({
   selector: 'rr-team-page',
@@ -44,15 +45,15 @@ export class TeamPageComponent implements OnInit {
   }
 
   goToEstimation(sprint: Sprint) {
-    this.router.navigate(['teams', this.model.key, 'sprints', sprint.key, 'estimations']);
+    this.router.navigate(NavUtils.estimationUrl(this.model.key, sprint.key));
   }
 
   goToRetro(sprint: Sprint) {
-    this.router.navigate(['teams', this.model.key, 'sprints', sprint.key, 'retros']);
+    this.router.navigate(NavUtils.retroUrl(this.model.key, sprint.key));
   }
 
   goToTeams() {
-    this.router.navigate(['teams']);
+    this.router.navigate(NavUtils.teamsUrl());
   }
 
   deleteTeam() {

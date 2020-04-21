@@ -3,6 +3,7 @@ import { TeamsPageService } from './teams-page.service';
 import { Router, ActivatedRoute } from '@angular/router';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { TeamsPage } from './models/teams-page.model';
+import { NavUtils } from '../common/nav-utils';
 
 @Component({
   selector: 'rr-teams-page',
@@ -41,6 +42,6 @@ export class TeamsPageComponent implements OnInit {
   }
 
   goToTeam(teamKey: string) {
-    this.router.navigate(['teams', teamKey]);
+    this.router.navigate(NavUtils.teamUrl(teamKey));
   }
 }

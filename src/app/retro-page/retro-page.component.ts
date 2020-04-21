@@ -9,6 +9,7 @@ import { RetroPageService } from './retro-page.service';
 import { UserService } from '../common/user.service';
 import { Message } from './models/message.model';
 import { Action } from './models/action.model';
+import { NavUtils } from '../common/nav-utils';
 
 @Component({
   selector: 'rr-retro-page',
@@ -101,7 +102,7 @@ export class RetroPageComponent implements OnInit {
   }
 
   goToTeam() {
-    this.router.navigate(['teams', this.model.teamKey]);
+    this.router.navigate(NavUtils.teamUrl(this.model.teamKey));
   }
 
   deleteRetro() {
