@@ -1,0 +1,32 @@
+.delete-column {
+    width: 40px;
+}
+.votes-options {
+    display: flex;
+    justify-content: space-between;
+}
+.votes-table {
+    width: 100%;
+    text-align: left;
+    margin-left: 13px;
+    margin-right: 13px;
+}
+.selected-story {
+    margin-top: 15px;
+    @media screen and (min-width: 767px) {
+        margin-top: 0;
+    }
+}
+.votes-column {
+    text-align: center;
+}
+.votes-show {
+    height: 40px;
+}
+.multistory-action {
+    margin-left: 15px;
+}
+.story-description {
+    text-align: left;
+    white-space: normal;
+}

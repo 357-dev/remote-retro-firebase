@@ -1,0 +1,149 @@
+<mat-toolbar color="primary">
+    <div class="title">
+        <button mat-icon-button matTooltip="Back to team" (click)="goToTeam()">
+            <mat-icon>arrow_back</mat-icon>
+        </button>
+        <h1>Estimation <span *ngIf="model.sprint | async as sprint"> - {{ sprint.name }} </span></h1>
+    </div>
+    <button mat-icon-button matTooltip="Delete sprint" (click)="deleteEstimation()">
+        <mat-icon>delete</mat-icon>
+    </button>
+</mat-toolbar>
+
+<div class="row" [hidden]="!loading">
+    <div class="col-xs-12">
+        <mat-spinner></mat-spinner>
+    </div>
+</div>
+
+<main class="main" [hidden]="loading">
+
+    <div class="row">
+        <div class="col-xs-12 col-sm-4 col-sm-offset-4">
+            <mat-form-field>
+                <mat-label>Story</mat-label>
+                <input matInput type="text" [(ngModel)]="newStory" (keydown.enter)="addStory(newStory)">
+                <button mat-button *ngIf="newStory" matSuffix mat-icon-button aria-label="Clear" (click)="clearStory()">
+                    <mat-icon>close</mat-icon>
+                </button>
+            </mat-form-field>
+        </div>
+
+        <div class="col-xs-12 col-sm-4">
+            <button mat-mini-fab color="primary" [disabled]="!newStory" (click)="addStory(newStory)" matTooltip="Add story">
+                <mat-icon>add</mat-icon>
+            </button>
+
+            <button class="multistory-action" mat-mini-fab color="primary" (click)="addStories()" matTooltip="Add multiple stories">
+                <mat-icon>playlist_add</mat-icon>
+            </button>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-xs-12 col-sm-6">
+
+            <table mat-table [dataSource]="(model.stories | async)" class="mat-elevation-z8">
+                <ng-container matColumnDef="description">
+                    <th mat-header-cell *matHeaderCellDef> Story </th>
+                    <td mat-cell *matCellDef="let story">
+                        <a class="story-description" href="#" (click)="selectStory(story)" mat-button>{{story.description}}</a>
+                    </td>
+                </ng-container>
+
+                <ng-container matColumnDef="delete">
+                    <th class="delete-column" mat-header-cell *matHeaderCellDef> </th>
+                    <td class="delete-column" mat-cell *matCellDef="let story">
+                        <button mat-mini-fab color="primary" (click)="deleteStory(story)" matTooltip="Delete story">
+                            <mat-icon>delete</mat-icon>
+                        </button>
+                    </td>
+                </ng-container>
+
+                <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                <tr mat-row *matRowDef="let row; columns: displayedColumns;" [ngClass]="{'animated fadeOut': row.beingDeleted}"></tr>
+            </table>
+
+        </div>
+
+        <div class="col-xs-12 col-sm-6 animated fadeIn" *ngIf="selectedStory">
+            <mat-card class="selected-story">
+                <mat-card-header>
+                    <mat-card-title>{{ selectedStory.description }}</mat-card-title>
+                </mat-card-header>
+                <mat-card-content> 
+                    <table class="votes-table">
+                        <thead>
+                            <th>Nickname</th>
+                            <th class="votes-column">Vote</th>
+                        </thead>
+                        <tbody>
+                            <tr *ngFor="let vote of selectedStory.votes | keyvalue">
+                                <td>{{ vote.key }}</td>
+                                <td class="votes-column">
+                                    <span [hidden]="!selectedStory.votesVisible">
+                                        <span [hidden]="vote.value ==='weekend'">{{ vote.value }}</span>
+                                        <span [hidden]="vote.value !=='weekend'">
+                                            <mat-icon>weekend</mat-icon>
+                                        </span>
+                                    </span>
+                                    <span [hidden]="selectedStory.votesVisible">
+                                        <mat-icon>done</mat-icon>
+                                    </span>
+                                </td>
+                            </tr>
+                            <tr class="votes-show">
+                                <td></td>
+                                <td class="votes-column">
+                                    <button mat-icon-button color="accent" (click)="showVotes()"
+                                        [hidden]="selectedStory.votesVisible"
+                                        matTooltip="Show votes">
+                                        <mat-icon>done_all</mat-icon>
+                                    </button>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </mat-card-content>
+                <mat-card-actions class="votes-options">
+                    <button mat-mini-fab color="accent" (click)="vote('1')">
+                        1
+                    </button>
+
+                    <button mat-mini-fab color="accent" (click)="vote('2')">
+                        2
+                    </button>
+
+                    <button mat-mini-fab color="accent" (click)="vote('3')">
+                        3
+                    </button>
+
+                    <button mat-mini-fab color="accent" (click)="vote('5')">
+                        5
+                    </button>
+
+                    <button mat-mini-fab color="accent" (click)="vote('8')">
+                        8
+                    </button>
+
+                    <button mat-mini-fab color="accent" (click)="vote('13')">
+                        13
+                    </button>
+
+                    <button mat-mini-fab color="accent" (click)="vote('20')">
+                        20
+                    </button>
+
+                    <button mat-mini-fab color="accent" (click)="vote('?')">
+                        ?
+                    </button>
+
+                    <button mat-mini-fab color="accent" (click)="vote('weekend')">
+                        <mat-icon>weekend</mat-icon>
+                    </button>
+                </mat-card-actions>
+            </mat-card>
+        </div>
+    </div>
+
+</main>

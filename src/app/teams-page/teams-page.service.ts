@@ -1,15 +1,16 @@
 import { Injectable } from '@angular/core';
 import { AngularFireDatabase } from '@angular/fire/database';
-import * as moment from 'moment';
+import { Team } from './models/team.model';
 
 @Injectable({
   providedIn: 'root'
 })
-export class SessionsPageService {
+export class TeamsPageService {
 
   constructor(private db: AngularFireDatabase) { }
 
-  createRetroSession(title: string) {
-     return this.db.list('sessions').push({ title, created: moment().format('Do MMM YYYY') });
+  createTeam(name: string) {
+    const team: Team = { key: null, name };
+    return this.db.list('teams').push(team);
   }
 }

@@ -1,27 +1,46 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
-import { SessionsPageComponent } from './sessions-page/sessions-page.component';
 import { IntroPageComponent } from './intro-page/intro-page.component';
-import { SessionsPageResolver } from './sessions-page/sessions-page.resolver';
-import { SessionPageComponent } from './session-page/session-page.component';
-import { SessionPageResolver } from './session-page/session-page.resolver';
+import { TeamsPageResolver } from './teams-page/teams-page.resolver';
+import { TeamsPageComponent } from './teams-page/teams-page.component';
+import { TeamPageComponent } from './team-page/team-page.component';
+import { TeamPageResolver } from './team-page/team-page.resolver';
+import { RetroPageComponent } from './retro-page/retro-page.component';
+import { RetroPageResolver } from './retro-page/retro-page.resolver';
+import { EstimationPageComponent } from './estimation-page/estimation-page.component';
+import { EstimationPageResolver } from './estimation-page/estimation-page.resolver';
 
 
 const routes: Routes = [
   {
-    path: 'sessions/:sessionKey',
-    component: SessionPageComponent,
+    path: 'teams/:teamKey/sprints/:sprintKey/retros',
+    component: RetroPageComponent,
     resolve: {
-      model: SessionPageResolver
+      model: RetroPageResolver
     }
   },
   {
-    path: 'sessions',
-    component: SessionsPageComponent,
+    path: 'teams/:teamKey/sprints/:sprintKey/estimations',
+    component: EstimationPageComponent,
     resolve: {
-      model: SessionsPageResolver
+      model: EstimationPageResolver
     }
-  }, {
+  },
+  {
+    path: 'teams/:teamKey',
+    component: TeamPageComponent,
+    resolve: {
+      model: TeamPageResolver
+    }
+  },
+  {
+    path: 'teams',
+    component: TeamsPageComponent,
+    resolve: {
+      model: TeamsPageResolver
+    }
+  },
+  {
     path: '',
     component: IntroPageComponent
   }];

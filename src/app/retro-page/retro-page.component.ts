@@ -1,24 +1,24 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
-import { MatSnackBar } from '@angular/material/snack-bar';
+import { ActivatedRoute, Router } from '@angular/router';
 import { ENTER } from '@angular/cdk/keycodes';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
-import { SessionPage } from './models/session-page.model';
-import { SessionPageService } from './session-page.service';
 import { MessageCategories } from './models/message-categories.enum';
-import { Message } from './models/message.model';
+import { RetroPage } from './models/retro-page.model';
+import { RetroPageService } from './retro-page.service';
 import { UserService } from '../common/user.service';
+import { Message } from './models/message.model';
 import { Action } from './models/action.model';
 
 @Component({
-  selector: 'rr-session-page',
-  templateUrl: './session-page.component.html',
-  styleUrls: ['./session-page.component.scss']
+  selector: 'rr-retro-page',
+  templateUrl: './retro-page.component.html',
+  styleUrls: ['./retro-page.component.scss']
 })
-export class SessionPageComponent implements OnInit {
+export class RetroPageComponent implements OnInit {
   separatorKeysCodes: number[] = [ENTER];
   categories = MessageCategories;
-  model: SessionPage;
+  model: RetroPage;
 
   startMessage: string;
   stopMessage: string;
@@ -27,15 +27,18 @@ export class SessionPageComponent implements OnInit {
 
   messagesLoading: boolean;
 
-  constructor(private route: ActivatedRoute,
-              private service: SessionPageService, private userService: UserService,
-              private snackBar: MatSnackBar) {
+  constructor(
+    private router: Router,
+    private route: ActivatedRoute,
+    private service: RetroPageService,
+    private userService: UserService,
+    private snackBar: MatSnackBar) {
     this.model = this.route.snapshot.data.model;
   }
 
   ngOnInit(): void {
     this.messagesLoading = true;
-    this.model.messages.subscribe(() => this.messagesLoading = false, () => this.snackBar.open('Lost connection. Please refresh!'));
+    this.model.messages.subscribe(() => this.messagesLoading = false);
   }
 
   addMessage(category: MessageCategories) {
@@ -49,7 +52,7 @@ export class SessionPageComponent implements OnInit {
     }
 
     const message: Message = { key: null, body, author: this.userService.getNickname(), category, votes: 0 };
-    this.service.addMessage(this.model.sessionKey, message)
+    this.service.addMessage(this.model.sprintKey, message)
       .then(() => this.clearMessage(category))
       .catch(() => this.snackBar.open('Failed to add message. Try again please.'));
   }
@@ -65,18 +68,19 @@ export class SessionPageComponent implements OnInit {
   }
 
   thumbsUp(message: Message) {
-    this.service.thumbsUp(this.model.sessionKey, message)
+    this.service.thumbsUp(this.model.sprintKey, message)
       .catch(() => this.snackBar.open('Failed to upvote. Try again please.'));
   }
 
   thumbsDown(message: Message) {
-    this.service.thumbsDown(this.model.sessionKey, message)
+    this.service.thumbsDown(this.model.sprintKey, message)
       .catch(() => this.snackBar.open('Failed to downvote. Try again please.'));
   }
 
   delete(message: Message) {
-    this.service.deleteMessage(this.model.sessionKey, message)
-      .catch(() => this.snackBar.open('Failed to remove message. Try again please.'));
+    message.beingDeleted = true;
+    setTimeout(() => this.service.deleteMessage(this.model.sprintKey, message)
+      .catch(() => this.snackBar.open('Failed to remove message. Try again please.')), 1000);
   }
 
   isMine(message: Message): boolean {
@@ -85,14 +89,23 @@ export class SessionPageComponent implements OnInit {
 
   addAction() {
     if (this.action) {
-      this.service.addAction(this.model.sessionKey, { key: null, action: this.action.trim() })
+      this.service.addAction(this.model.sprintKey, { key: null, action: this.action.trim() })
         .then(() => this.action = '')
         .catch(() => this.snackBar.open('Failed to add action. Try again please.'));
     }
   }
 
   removeAction(action: Action) {
-    this.service.deleteAction(this.model.sessionKey, action)
+    this.service.deleteAction(this.model.sprintKey, action)
       .catch(() => this.snackBar.open('Failed to remove action. Try again please.'));
+  }
+
+  goToTeam() {
+    this.router.navigate(['teams', this.model.teamKey]);
+  }
+
+  deleteRetro() {
+    this.service.deleteRetro(this.model.sprintKey)
+      .then(() => this.goToTeam());
   }
 }

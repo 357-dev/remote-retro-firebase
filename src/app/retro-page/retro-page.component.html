@@ -1,0 +1,233 @@
+<mat-toolbar color="primary">
+    <div class="title">
+        <button mat-icon-button matTooltip="Back to Team" (click)="goToTeam()">
+            <mat-icon>arrow_back</mat-icon>
+        </button>
+        <h1>Retrospective <span *ngIf="model.sprint | async as sprint"> - {{ sprint.name }} </span></h1>
+    </div>
+    <button mat-icon-button matTooltip="Delete sprint" (click)="deleteRetro()">
+        <mat-icon>delete</mat-icon>
+    </button>
+</mat-toolbar>
+
+<div class="row" [hidden]="!messagesLoading">
+    <div class="col-xs-12">
+        <mat-spinner></mat-spinner>
+    </div>
+</div>
+
+<main class="main" [hidden]="messagesLoading">
+
+    <div class="row">
+        <div class="col-xs-12 col-sm-4">
+            <mat-card class="start">
+                <mat-card-content>
+                    <mat-form-field>
+                        <mat-label>Add start message</mat-label>
+                        <input matInput type="text" [(ngModel)]="startMessage"
+                            (keydown.enter)="addMessage(categories.START)">
+                        <button mat-button *ngIf="startMessage" matSuffix mat-icon-button aria-label="Clear"
+                            (click)="clearMessage(categories.START)">
+                            <mat-icon>close</mat-icon>
+                        </button>
+                    </mat-form-field>
+                </mat-card-content>
+                <mat-card-actions align="end">
+                    <button mat-mini-fab color="primary" [disabled]="!startMessage"
+                        (click)="addMessage(categories.START)" matTooltip="Add comment">
+                        <span class="material-icons">
+                            post_add
+                        </span>
+                    </button>
+                </mat-card-actions>
+            </mat-card>
+        </div>
+
+        <div class="col-xs-12 col-sm-4">
+            <mat-card class="stop">
+                <mat-card-content>
+                    <mat-form-field>
+                        <mat-label>Add stop message</mat-label>
+                        <input matInput type="text" [(ngModel)]="stopMessage"
+                            (keydown.enter)="addMessage(categories.STOP)">
+                        <button mat-button *ngIf="stopMessage" matSuffix mat-icon-button aria-label="Clear"
+                            (click)="clearMessage(categories.STOP)">
+                            <mat-icon>close</mat-icon>
+                        </button>
+                    </mat-form-field>
+                </mat-card-content>
+                <mat-card-actions align="end">
+                    <button mat-mini-fab color="primary" [disabled]="!stopMessage" (click)="addMessage(categories.STOP)"
+                        matTooltip="Add comment">
+                        <span class="material-icons">
+                            post_add
+                        </span>
+                    </button>
+                </mat-card-actions>
+            </mat-card>
+        </div>
+
+        <div class="col-xs-12 col-sm-4">
+            <mat-card class="continue">
+                <mat-card-content>
+                    <mat-form-field>
+                        <mat-label>Add continue message</mat-label>
+                        <input matInput type="text" [(ngModel)]="continueMessage"
+                            (keydown.enter)="addMessage(categories.CONTINUE)">
+                        <button mat-button *ngIf="continueMessage" matSuffix mat-icon-button aria-label="Clear"
+                            (click)="clearMessage(categories.CONTINUE)">
+                            <mat-icon>close</mat-icon>
+                        </button>
+                    </mat-form-field>
+                </mat-card-content>
+                <mat-card-actions align="end">
+                    <button mat-mini-fab color="primary" [disabled]="!continueMessage"
+                        (click)="addMessage(categories.CONTINUE)" matTooltip="Add comment">
+                        <span class="material-icons">
+                            post_add
+                        </span>
+                    </button>
+                </mat-card-actions>
+            </mat-card>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-xs-12">
+            <mat-divider></mat-divider>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-xs-12 col-sm-4">
+            <div class="message-column">
+
+                <mat-card class="start" [matBadge]="message.votes ? message.votes : ''" matBadgePosition="after"
+                    matBadgeColor="accent"
+                    *ngFor="let message of model.messages | async | categoryFilter: categories.START"
+                    [ngClass]="{'animated hinge fast': message.beingDeleted}">
+                    <mat-card-content>
+                        <p>{{ message.body }}</p>
+                        <p class="author">{{ message.author }}</p>
+                    </mat-card-content>
+                    <mat-card-actions align="end">
+                        <button mat-mini-fab color="primary" class="message-action" [disabled]="!isMine(message)"
+                            (click)="delete(message)" matTooltip="Delete comment">
+                            <span class="material-icons">
+                                delete
+                            </span>
+                        </button>
+                        <button mat-mini-fab color="primary" class="message-action" (click)="thumbsDown(message)">
+                            <span class="material-icons" matTooltip="Vote up">
+                                thumb_down
+                            </span>
+                        </button>
+                        <button mat-mini-fab color="primary" class="message-action" (click)="thumbsUp(message)">
+                            <span class="material-icons" matTooltip="Vote down">
+                                thumb_up
+                            </span>
+                        </button>
+                    </mat-card-actions>
+                </mat-card>
+
+            </div>
+        </div>
+
+        <div class="col-xs-12 col-sm-4">
+            <div class="message-column">
+
+                <mat-card class="stop" [matBadge]="message.votes ? message.votes : ''" matBadgePosition="after"
+                    matBadgeColor="accent"
+                    *ngFor="let message of model.messages | async | categoryFilter: categories.STOP"
+                    [ngClass]="{'animated hinge': message.beingDeleted}">
+                    <mat-card-content>
+                        <p>{{ message.body }}</p>
+                        <p class="author">{{ message.author }}</p>
+                    </mat-card-content>
+                    <mat-card-actions align="end">
+                        <button mat-mini-fab color="primary" class="message-action" [disabled]="!isMine(message)"
+                            (click)="delete(message)" matTooltip="Delete comment">
+                            <span class="material-icons">
+                                delete
+                            </span>
+                        </button>
+                        <button mat-mini-fab color="primary" class="message-action" (click)="thumbsDown(message)">
+                            <span class="material-icons" matTooltip="Vote up">
+                                thumb_down
+                            </span>
+                        </button>
+                        <button mat-mini-fab color="primary" class="message-action" (click)="thumbsUp(message)">
+                            <span class="material-icons" matTooltip="Vote down">
+                                thumb_up
+                            </span>
+                        </button>
+                    </mat-card-actions>
+                </mat-card>
+
+            </div>
+        </div>
+
+        <div class="col-xs-12 col-sm-4">
+            <div class="message-column">
+                <mat-card class="continue" [matBadge]="message.votes ? message.votes : ''" matBadgePosition="after"
+                    matBadgeColor="accent"
+                    *ngFor="let message of model.messages | async | categoryFilter: categories.CONTINUE"
+                    [ngClass]="{'animated hinge': message.beingDeleted}">
+                    <mat-card-content>
+                        <p>{{ message.body }}</p>
+                        <p class="author">{{ message.author }}</p>
+                    </mat-card-content>
+                    <mat-card-actions align="end">
+                        <button mat-mini-fab color="primary" class="message-action" [disabled]="!isMine(message)"
+                            (click)="delete(message)" matTooltip="Delete comment">
+                            <span class="material-icons">
+                                delete
+                            </span>
+                        </button>
+                        <button mat-mini-fab color="primary" class="message-action" (click)="thumbsDown(message)">
+                            <span class="material-icons" matTooltip="Vote up">
+                                thumb_down
+                            </span>
+                        </button>
+                        <button mat-mini-fab color="primary" class="message-action" (click)="thumbsUp(message)">
+                            <span class="material-icons" matTooltip="Vote down">
+                                thumb_up
+                            </span>
+                        </button>
+                    </mat-card-actions>
+                </mat-card>
+
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-xs-12">
+            <mat-divider></mat-divider>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-xs-12 col-md-6 col-md-offset-3">
+            <mat-form-field>
+                <mat-chip-list #chipList aria-label="Actions">
+                    <mat-chip color="accent" selected *ngFor="let action of model.actions | async" selectable="false"
+                        removable="true" (removed)="removeAction(action)">
+                        {{action.action}}
+                        <mat-icon matChipRemove>cancel</mat-icon>
+                    </mat-chip>
+                    <input placeholder="Actions" [(ngModel)]="action" [matChipInputFor]="chipList"
+                        [matChipInputSeparatorKeyCodes]="separatorKeysCodes" (matChipInputTokenEnd)="addAction()">
+                </mat-chip-list>
+            </mat-form-field>
+        </div>
+        <div class="col-xs-12 col-md-3">
+            <button mat-mini-fab color="primary" (click)="addAction()" matTooltip="Add action">
+                <span class="material-icons">
+                    add
+                </span>
+            </button>
+        </div>
+    </div>
+
+</main>

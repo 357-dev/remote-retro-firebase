@@ -23,7 +23,7 @@ export class IntroPageComponent implements OnInit {
 
   pickSession() {
     this.userService.setNickname(this.nickname);
-    this.router.navigate(['sessions']);
+    this.router.navigate(['teams']);
   }
 
   anonymousChanged(event: MatCheckboxChange) {

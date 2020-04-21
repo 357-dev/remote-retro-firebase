@@ -1,0 +1,24 @@
+<div class="row">
+    <div class="col-xs-12">
+        <p>Copy paste stories which are comma seperated or each line is a new story. Feel free to type the story and hit enter. Stories will only be added when you click 'Done.</p>
+    </div>
+</div>
+<div class="row">
+    <div class="col-xs-12">
+        <mat-form-field>
+            <mat-chip-list #chipList aria-label="Actions">
+                <mat-chip color="accent" selected *ngFor="let story of data.stories" selectable="false" removable="true"
+                    (removed)="removeStory(story)">
+                    {{story}}
+                    <mat-icon matChipRemove>cancel</mat-icon>
+                </mat-chip>
+                <input placeholder="Stories" [(ngModel)]="newStory" [matChipInputFor]="chipList"
+                    [matChipInputSeparatorKeyCodes]="separatorKeysCodes" (matChipInputTokenEnd)="addStory(newStory)"
+                    (paste)="onPaste($event)">
+            </mat-chip-list>
+        </mat-form-field>
+    </div>
+    <div class="col-xs-12 col-md-3">
+        <button mat-raised-button color="primary" (click)="done()" matTooltip="Add the stories">Done</button>
+    </div>
+</div>

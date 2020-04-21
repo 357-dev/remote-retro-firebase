@@ -6,4 +6,7 @@ export interface Message {
     author: string;
     category: MessageCategories;
     votes: number;
+
+    // Used for animations
+    beingDeleted?: boolean;
 }

@@ -1,0 +1,77 @@
+<mat-toolbar color="primary">
+    <div class="title">
+        <button mat-icon-button matTooltip="Back to teams" (click)="goToTeams()">
+            <mat-icon>arrow_back</mat-icon>
+        </button>
+        <h1>Create a sprint</h1>
+    </div>
+    <button mat-icon-button matTooltip="Delete sprint" (click)="deleteTeam()">
+        <mat-icon>delete</mat-icon>
+    </button>
+</mat-toolbar>
+
+<div class="row" [hidden]="!loading">
+    <div class="col-xs-12">
+        <mat-spinner></mat-spinner>
+    </div>
+</div>
+
+<main class="main" [hidden]="loading">
+    <div class="row">
+        <div class="col-xs-12 col-sm-4 col-sm-offset-4">
+            <mat-form-field class="example-form-field">
+                <mat-label>Sprint name</mat-label>
+                <input matInput type="text" [(ngModel)]="newSprint" (keydown.enter)="createSprint()">
+                <button mat-button *ngIf="newSprint" matSuffix mat-icon-button aria-label="Clear"
+                    (click)="clearSprint()">
+                    <mat-icon>close</mat-icon>
+                </button>
+            </mat-form-field>
+        </div>
+
+        <div class="col-xs-12 col-sm-4">
+            <button mat-mini-fab color="primary" [disabled]="!newSprint" (click)="createSprint()">
+                <mat-icon>add</mat-icon>
+            </button>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-xs-12 col-sm-8 col-sm-offset-2">
+
+            <table mat-table [dataSource]="(model.sprints | async)?.reverse()" class="mat-elevation-z8">
+                <ng-container matColumnDef="name">
+                    <th mat-header-cell *matHeaderCellDef> Name </th>
+                    <td mat-cell *matCellDef="let sprint"> {{sprint.name}} </td>
+                </ng-container>
+
+                <ng-container matColumnDef="created">
+                    <th mat-header-cell *matHeaderCellDef> Created </th>
+                    <td mat-cell *matCellDef="let sprint"> {{sprint.created}} </td>
+                </ng-container>
+
+                <ng-container matColumnDef="estimation">
+                    <th mat-header-cell *matHeaderCellDef> Estimation </th>
+                    <td mat-cell *matCellDef="let sprint">
+                        <button mat-mini-fab color="primary" (click)="goToEstimation(sprint)">
+                            <mat-icon>money</mat-icon>
+                        </button>
+                    </td>
+                </ng-container>
+
+                <ng-container matColumnDef="retro">
+                    <th mat-header-cell *matHeaderCellDef> Retro </th>
+                    <td mat-cell *matCellDef="let sprint">
+                        <button mat-mini-fab color="primary" (click)="goToRetro(sprint)">
+                            <mat-icon>thumbs_up_down</mat-icon>
+                        </button>
+                    </td>
+                </ng-container>
+
+                <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+            </table>
+
+        </div>
+    </div>
+</main>

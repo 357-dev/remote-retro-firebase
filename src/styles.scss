@@ -1,19 +1,28 @@
-/* You can add global styles to this file, and also import other style files */
+@import "~@angular/material/theming";
+$custom-typography: mat-typography-config(
+  $font-family: "Open Sans",
+);
+
+@include angular-material-typography($custom-typography);
+
 [hidden] {
   display: none !important;
 }
 
 body {
   margin: 0;
-  font-family: "Open Sans", "Helvetica Neue", sans-serif;
   background: #303030;
+  color: white;
+}
+
+.main {
   max-width: 1280px;
   margin-left: auto;
   margin-right: auto;
   padding: 15px;
-  color: white;
 }
 
+.mat-table,
 .mat-form-field {
   width: 100%;
 }
@@ -30,4 +39,15 @@ body {
 .mat-spinner {
   margin-left: auto;
   margin-right: auto;
+}
+
+.mat-toolbar {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 1rem;
+
+  .title {
+    display: flex;
+    align-items: center;
+  }
 }
